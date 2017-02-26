@@ -8,7 +8,7 @@ import webbrowser
 import os
 import os.path
 import zlib
-
+from PIL import *
 #from Auto_CHPTCHA import *
 from pass_input import *
 class sim_client:
@@ -27,6 +27,8 @@ class sim_client:
         temp_file = open('temp_code.jpg', 'wb')
         temp_file.write(self.opener.open(self.CodeUrl).read())
         temp_file.close()
+        img = Image.open('temp_code.jpg')
+        img.show()
    #     validate_code = Auto_CHPTCHA('temp_code.jpg',model_dict)
         validate_code = raw_input('manually type in the validate code you see\n')
         self.IndexBody['txtValiCode'] = str(validate_code)
@@ -86,7 +88,7 @@ def course_attack(username, password, model_dcit, class_list, idle_time = 5000, 
     print 'peace'
     return None
 
-def wise_course_attack(username, password, model_dcit, class_list, idle_time = 2, reset_time = 5000):
+def wise_course_attack(username, password, model_dcit, class_list, idle_time = 5000, reset_time = 7000):
     client = client_login(username, password, model_dict)
     request = request_constructor(username, 'select_course', class_list)
     vain = client.opener.open('http://xk.autoisp.shu.edu.cn:8080/CourseSelectionStudent/FastInput')

@@ -10,7 +10,7 @@ import os.path
 import zlib
 from PIL import *
 #from Auto_CHPTCHA import *
-from pass_input import *
+#from pass_input import *
 class sim_client:
     def __init__(self, username, password, model_dict):
         self.model_dict = model_dict
@@ -27,8 +27,8 @@ class sim_client:
         temp_file = open('temp_code.jpg', 'wb')
         temp_file.write(self.opener.open(self.CodeUrl).read())
         temp_file.close()
-        img = Image.open('temp_code.jpg')
-        img.show()
+#        img = Image.open('temp_code.jpg')
+#        img.show()
    #     validate_code = Auto_CHPTCHA('temp_code.jpg',model_dict)
         validate_code = raw_input('manually type in the validate code you see\n')
         self.IndexBody['txtValiCode'] = str(validate_code)
@@ -119,7 +119,7 @@ test_list = [{'classid' : '00874008', 'teacherid' : '1018'}]
 
 #get input
 username = raw_input('enter student id:')
-password = pwd_input('enter passphrase(psw):')
+password = raw_input('enter passphrase(psw):')
 class_number = input('enter the number of class:')
 class_list = [{'classid' : '', 'teacherid' : ''} for i in range(class_number)]
 

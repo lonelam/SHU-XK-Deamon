@@ -60,7 +60,7 @@ def request_constructor(username, request_type, parameter):
         access_url = select_url
     return urllib2.Request(access_url,raw_data_sheet)
 
-def course_attack(username, password, model_dcit, class_list, idle_time = 2, reset_time = 50):
+def course_attack(username, password, model_dcit, class_list, idle_time = 5000, reset_time = 7000):
     client = client_login(username, password, model_dict)
     request = request_constructor(username, 'select_course', class_list)
     vain = client.opener.open('http://xk.autoisp.shu.edu.cn:8080/CourseSelectionStudent/FastInput')
@@ -68,7 +68,7 @@ def course_attack(username, password, model_dcit, class_list, idle_time = 2, res
     embark = time.time()
     while flag:
         reponse = client.opener.open(request).read()
-        #print reponse.decode('utf8')
+        print reponse.decode('utf8')
         if len(re.findall('已选此课程', reponse)) == len(class_list):
             print 'check'
             flag = True

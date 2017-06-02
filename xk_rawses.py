@@ -12,6 +12,7 @@ import urllib.request
 import re
 import logging
 import zlib
+import from Auto_CHPTCHA import *
 
 n=0
 base_url = 'http://180.168.188.21:8080'

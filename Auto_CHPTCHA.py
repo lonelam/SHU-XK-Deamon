@@ -5,6 +5,7 @@ import os.path
 from PIL import Image
 from svmutil import *
 import threading
+model_dir = r'C:\Users\digge\Desktop\model'
 def check(img,x,y):
     if (x < 0 or y < 0 or x > img.size[0] - 1 or y > img.size[1] - 1):
         return True
@@ -78,6 +79,7 @@ def hyper_classifer(model_dict,train_data):
     return chr(score.index(max(score)))
 
 def Auto_CHPTCHA(org_validate_img, model_dict):
+    files = os.listdir(model_dir)
     img = Image.open(org_validate_img)
     img = binaryzation(img)
     img_list = split_image(img)

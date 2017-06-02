@@ -6,11 +6,18 @@ import os
 import os.path
 import zlib
 import http.cookiejar
-from PIL import *
+import matplotlib.pyplot as plt
+from PIL import Image
+import pytesseract
+import logging
 #from Auto_CHPTCHA import *
 #from pass_input import *
 
+model_dict = {}
+logging.basicConfig(filename = 'xk.log', level = logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
 base_url = 'http://xk.autoisp.shu.edu.cn:8080'
+
 class sim_client:
     def __init__(self, username, password):
         #self.model_dict = model_dict
@@ -23,16 +30,22 @@ class sim_client:
         self.cookieHandler = urllib.request.HTTPCookieProcessor(self.cookie)
         self.opener = urllib.request.build_opener(self.cookieHandler, urllib.request.HTTPHandler)
     def run(self):
-        self.opener.open(self.IndexUrl)
-        temp_file = open('temp_code.jpg', 'wb')
-        temp_file.write(self.opener.open(self.CodeUrl).read())
-        temp_file.close()
         
-#        img = Image.open('temp_code.jpg')
-#        img.show()
-#        validate_code = Auto_CHPTCHA('temp_code.jpg',model_dict)
-        validate_code = input('manually type in the validate code you see\n')
-        self.IndexBody['txtValiCode'] = str(validate_code)
+        while True:
+            self.opener.open(self.IndexUrl)
+            temp_file = open('temp_code.jpg', 'wb')
+            temp_file.write(self.opener.open(self.CodeUrl).read())
+            temp_file.close()
+            img = Image.open('temp_code.jpg')
+            #img = img.convert('1')
+            #img.show()
+            validate_code = pytesseract.image_to_string(img)
+            if (len(validate_code)!=4):
+                continue
+            logging.debug(validate_code)
+          #  validate_code = input('manually type in the validate code you see\n')
+            self.IndexBody['txtValiCode'] = str(validate_code)
+            break
         content = self.__login()
         return content
     def __login(self):
@@ -45,9 +58,12 @@ class sim_client:
 def client_login(username, password):
     client = sim_client(username, password)
     content = client.run()
-    while content.find('Validate') != -1:
+   # logging.debug(content)
+    while content.find('上学期平均绩点') == -1:
+        if (content.find('限制') != -1):
+            logging.debug('被限制登陆了')
         content = client.run()
-    print ('login success')
+    logging.debug('login success')
     return client
 
 #for course inquire, the parameter is class name. for course selection,it's the list of class
@@ -64,7 +80,7 @@ def request_constructor(username, request_type, parameter):
         access_url = select_url
     return urllib.request.Request(access_url,raw_data_sheet.encode())
 
-def course_attack(username, password, class_list, idle_time = 7, reset_time = 7000):
+def course_attack(username, password, class_list, idle_time = 7, reset_time = 10000):
     client = client_login(username, password)
     request = request_constructor(username, 'select_course', class_list)
     vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
@@ -72,54 +88,32 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 70
     embark = time.time()
     while flag:
         reponse = client.opener.open(request).read().decode()
-        print(reponse)
+        #logging.debug(reponse)
+        if (len(re.findall('教学班人数已满', reponse)) != 0):
+            logging.debug('课满，继续尝试')
         if len(re.findall('已选此课程', reponse)) == len(class_list):
-            print ('check')
-            flag = True
-        if len(re.findall('已选此课程', reponse)) != 0:
+            logging.debug ('check')
+            flag = False
+        elif len(re.findall('已选此课程', reponse)) != 0:
             vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
         if len(re.findall('限制', reponse)) != 0:
-            print('hypocritical')
+            logging.debug('被限制登陆了')
             return None 
         #print(time.time() - embark)
-        if len(re.findall('请输入',reponse)) != 0:
-            print('farewell')
+        elif len(re.findall('请输入',reponse)) != 0:
+            logging.debug('登出了不知道为什么')
             client = client_login(username, password)
             vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
             #embark = time.time()
         time.sleep(idle_time)
-    print ('peace')
+    print ('结束')
     return None
 
-def wise_course_attack(username, password, class_list, idle_time = 5, reset_time = 7000):
-    client = client_login(username, password)
-    request = request_constructor(username, 'select_course', class_list)
-    vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-    flag = True
-    embark = time.time()
-    while flag:
-        #print client.opener.open(request).read()
-        client.opener.open('http://xk.autoisp.shu.edu.cn:8080/Login/Logout') 
-        vain = client.opener.open('http://xk.autoisp.shu.edu.cn:8080/Login/Index')
-        client = client_login(username, password, model_dict)
-        if client.opener.open('http://xk.autoisp.shu.edu.cn:8080/StudentQuery/QueryEnrollRank').read().find('排名') != -1:
-            print (time.time())
-        vain = client.opener.open('/CourseSelectionStudent/FastInput')
-        #print vain.read()
-    print ('peace')
-    return None
 
 #preload svm model
-#model_dir = os.getcwd() + '\\model'
-#print model_dir
-#files = os.listdir(model_dir)
-#model_dict = {}
-#for file in files:
-#    temp_model = svm_load_model(model_dir + '\\' + file)
-#    model_dict[str(file).strip('.model')] = temp_model
 
 #get input
-
+#pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 username = '15123005'
 password = 'Laizenan09'
 class_ids = ['08306030',]

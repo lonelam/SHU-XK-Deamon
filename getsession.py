@@ -8,5 +8,5 @@ Created on Fri Jun  2 18:38:36 2017
 import urllib.request
 
 
-def getsession(username, password, baseurl = 'http://xk.shu.edu.cn:8080'):
+def getsession(username = '15122943', password='Ran0929', baseurl = 'http://xk.shu.edu.cn:8080'):
     

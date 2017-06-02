@@ -14,7 +14,7 @@ import logging
 import zlib
 
 n=0
-base_url = 'http://180.168.188.21:8080'
+base_url = 'http://xk.shu.edu.cn:8080'
 url=base_url + '/CourseSelectionStudent/CtrlViewOperationResult'
 SessionId = 'lkw15dp1opd2bv3yst11p1mh'
 CourseStr = '08306030'
@@ -23,7 +23,8 @@ StudentNo = '15123005'
 logging.basicConfig(filename = 'xk.log', level = logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 def bang():
-    headers = {'Origin': 'http://xk.shu.edu.cn:8080', 'Content-Length': '110', 'Accept-Language': 'zh-CN,zh;q=0.8', 'Accept-Encoding': 'gzip, deflate', 'X-Requested-With': 'XMLHttpRequest', 'Host': 'xk.shu.edu.cn', 'Accept': '*/*', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2552.0 Safari/537.36', 'Connection': 'keep-alive', 'Cookie': 'Hm_lvt_444bf10f6d7469654b7f41f9f9f9c301=1493201287; ASP.NET_SessionId=' +SessionId , 'Referer': 'http://xk.shu.edu.cn:8080/CourseSelectionStudent/FuzzyQuery', 'Content-Type': 'application/x-www-form-urlencoded'}
+    headers = {
+    'Content-Length': '110', 'Accept-Language': 'zh-CN,zh;q=0.8', 'Accept-Encoding': 'gzip, deflate', 'X-Requested-With': 'XMLHttpRequest', 'Host': 'xk.shu.edu.cn', 'Accept': '*/*', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2552.0 Safari/537.36', 'Connection': 'keep-alive', 'Cookie': 'Hm_lvt_444bf10f6d7469654b7f41f9f9f9c301=1493201287; ASP.NET_SessionId=' +SessionId , 'Referer': 'http://xk.shu.edu.cn:8080/CourseSelectionStudent/FuzzyQuery', 'Content-Type': 'application/x-www-form-urlencoded'}
     #data= {'stuNo': '15123005', 'IgnorCourseGroup': 'false', 'ListCourseStr': CourseStr, 'IgnorClassMark': 'false', 'IgnorCredit': 'false'}
     data2='ListCourseStr=' + CourseStr +'%7C' + TeacherStr + '%7C0&stuNo='+StudentNo + '&IgnorClassMark=false&IgnorCourseGroup=false&IgnorCredit=false'
     data2 = data2.encode()

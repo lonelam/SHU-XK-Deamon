@@ -11,10 +11,11 @@ import time
 import urllib.request
 import re
 import logging
+import zlib
 n=0
 base_url = 'http://xk.shu.edu.cn:8080'
 url=base_url + '/CourseSelectionStudent/CtrlViewOperationResult'
-SessionId = ''
+SessionId = 'lkw15dp1opd2bv3yst11p1mh'
 CourseStr = '08306030'
 TeacherStr = '1002'
 StudentNo = '15123005'
@@ -28,8 +29,11 @@ def bang():
     request=urllib.request.Request(url,data2,headers)
     response = urllib.request.urlopen(request)
     res=response.read()
-    #res=zlib.decompress(res,zlib.MAX_WBITS|32)
-    res = res.decode(response.info().get_content_charset())
+    try:
+        res = res.decode(response.info().get_content_charset())
+    except UnicodeDecodeError:
+        res=zlib.decompress(res,zlib.MAX_WBITS|32)
+        res = res.decode(response.info().get_content_charset())
     print(res)
     comingsoon = re.search('选课时间未到', res)
     susmat = re.search('成功',res)

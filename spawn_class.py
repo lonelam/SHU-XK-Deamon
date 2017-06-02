@@ -11,13 +11,14 @@ import zlib
 from PIL import *
 #from Auto_CHPTCHA import *
 #from pass_input import *
+base_url = 'http://xk.autoisp.shu.edu.cn:8080'
 class sim_client:
     def __init__(self, username, password, model_dict):
         self.model_dict = model_dict
         self.TxtUsername = username
         self.TxtPassword = password
-        self.IndexUrl = 'http://xk.autoisp.shu.edu.cn:8080/'
-        self.CodeUrl = 'http://xk.autoisp.shu.edu.cn:8080/Login/GetValidateCode?%20%20+%20GetTimestamp()'
+        self.IndexUrl = base_url
+        self.CodeUrl = base_url + '/Login/GetValidateCode?%20%20+%20GetTimestamp()'
         self.IndexBody = {'txtUserName':self.TxtUsername,'txtPassword':self.TxtPassword}
         self.cookie = cookielib.LWPCookieJar()
         self.cookieHandler = urllib2.HTTPCookieProcessor(self.cookie)
@@ -30,7 +31,7 @@ class sim_client:
 #        img = Image.open('temp_code.jpg')
 #        img.show()
    #     validate_code = Auto_CHPTCHA('temp_code.jpg',model_dict)
-        validate_code = raw_input('manually type in the validate code you see\n')
+        validate_code = input('manually type in the validate code you see\n')
         self.IndexBody['txtValiCode'] = str(validate_code)
         content = self.__login()
         return content
@@ -40,13 +41,12 @@ class sim_client:
         response = self.opener.open(request)
         content = response.read()
         return content
-    
-def client_login(username, password , model_dcit):
-    client = sim_client(username, password, model_dict)
+def client_login(username, password):
+    client = sim_client(username, password)
     content = client.run()
     while content.find('Validate') != -1:
         content = client.run()
-    print 'login success\n'
+    print ('login success')
     return client
 #for course inquire, the parameter is class name. for course selection,it's the list of class
 def request_constructor(username, request_type, parameter):
@@ -88,10 +88,10 @@ def course_attack(username, password, model_dcit, class_list, idle_time = 5000, 
     print 'peace'
     return None
 
-def wise_course_attack(username, password, model_dcit, class_list, idle_time = 5000, reset_time = 7000):
-    client = client_login(username, password, model_dict)
+def wise_course_attack(username, password, class_list, idle_time = 5000, reset_time = 7000):
+    client = client_login(username, password)
     request = request_constructor(username, 'select_course', class_list)
-    vain = client.opener.open('http://xk.autoisp.shu.edu.cn:8080/CourseSelectionStudent/FastInput')
+    vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
     flag = True
     embark = time.time()
     while flag:
@@ -101,12 +101,10 @@ def wise_course_attack(username, password, model_dcit, class_list, idle_time = 5
         client = client_login(username, password, model_dict)
         if client.opener.open('http://xk.autoisp.shu.edu.cn:8080/StudentQuery/QueryEnrollRank').read().find('排名') != -1:
             print time.time()
-        vain = client.opener.open('http://xk.autoisp.shu.edu.cn:8080/CourseSelectionStudent/FastInput')
+        vain = client.opener.open('/CourseSelectionStudent/FastInput')
         #print vain.read()
     print 'peace'
     return None
-
-test_list = [{'classid' : '00874008', 'teacherid' : '1018'}]
 
 #preload svm model
 #model_dir = os.getcwd() + '\\model'
@@ -118,15 +116,11 @@ test_list = [{'classid' : '00874008', 'teacherid' : '1018'}]
 #    model_dict[str(file).strip('.model')] = temp_model
 
 #get input
-username = raw_input('enter student id:')
-password = raw_input('enter passphrase(psw):')
-class_number = input('enter the number of class:')
-class_list = [{'classid' : '', 'teacherid' : ''} for i in range(class_number)]
 
-for i in range(class_number):
-    class_list[i]['classid'] = raw_input('the id of class ' +str(i) + ':')
-    class_list[i]['teacherid'] = raw_input('the id of teacher ' +str(i) + ':')
-class_list = test_list
+username = input('enter student id:')
+password = input('enter passphrase(psw):')
+class_ids = ['08306030',]
+teacher_ids = ['1002',]
+class_list = [(class_ids[i], teacher_ids[i]) for i in range(len(class_ids))]
 
-model_dict = {}
-course_attack(username, password, model_dict, class_list)
+course_attack(username, password, class_list)

@@ -14,7 +14,7 @@ import logging
 n=0
 base_url = 'http://xk.shu.edu.cn:8080'
 url=base_url + '/CourseSelectionStudent/CtrlViewOperationResult'
-SessionId = 'dzctw3tozyw4wojxgbovgqlt'
+SessionId = ''
 CourseStr = '08306030'
 TeacherStr = '1002'
 StudentNo = '15123005'

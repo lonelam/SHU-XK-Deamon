@@ -13,7 +13,7 @@ import re
 import logging
 import zlib
 n=0
-base_url = 'http://xk.shu.edu.cn:8080'
+base_url = 'http://180.168.188.21:8080'
 url=base_url + '/CourseSelectionStudent/CtrlViewOperationResult'
 SessionId = 'lkw15dp1opd2bv3yst11p1mh'
 CourseStr = '08306030'
@@ -34,7 +34,7 @@ def bang():
     except UnicodeDecodeError:
         res=zlib.decompress(res,zlib.MAX_WBITS|32)
         res = res.decode(response.info().get_content_charset())
-    print(res)
+    #print(res)
     comingsoon = re.search('选课时间未到', res)
     susmat = re.search('成功',res)
     errmat = re.search('请输入',res)
@@ -65,5 +65,5 @@ while True :
         #winsound.PlaySound('1.wav',winsound.SND_LOOP)
         break
     time.sleep(t/2)
-    print(n)
+    #print(n)
     time.sleep(t/2)

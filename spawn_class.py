@@ -91,6 +91,7 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
         #logging.debug(reponse)
         if (len(re.findall('教学班人数已满', reponse)) != 0):
             logging.debug('课满，继续尝试')
+        
         if len(re.findall('已选此课程', reponse)) == len(class_list):
             logging.debug ('check')
             flag = False

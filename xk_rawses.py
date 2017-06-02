@@ -47,7 +47,10 @@ def bang():
     if susmat!= None :
         logging.debug ('成功选课')
         return True
-    if errmat != None or errmat2 != None:
+    if errmat != None :
+        logging.debug('需要重新登陆')
+        return True
+    if errmat2 != None:
         logging.debug ('异常出现拉，赶紧来看看！！')
         return True
     if contmat !=None :

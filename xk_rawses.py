@@ -29,7 +29,7 @@ def bang():
     response = urllib.request.urlopen(request)
     res=response.read()
     #res=zlib.decompress(res,zlib.MAX_WBITS|32)
-    res = res.decode()
+    res = res.decode(response.info().get_content_charset())
     print(res)
     comingsoon = re.search('选课时间未到', res)
     susmat = re.search('成功',res)

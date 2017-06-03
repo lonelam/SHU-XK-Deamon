@@ -1,3 +1,5 @@
+temp_code.jpg
+*.ini
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -61,4 +63,3 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-temp_code.jpg

@@ -5,13 +5,18 @@ import time
 import os
 import os.path
 import zlib
+import configparser
 import http.cookiejar
 import matplotlib.pyplot as plt
 from PIL import *
 import pytesseract
 import logging
+import platform
 #from Auto_CHPTCHA import *
 threshold=110
+cfg = configparser.ConfigParser()
+cfg.read('config.ini')
+password = str(cfg.get('user', 'password'))
 table = []
 for i in range(256):
     if i < threshold:
@@ -68,9 +73,10 @@ class sim_client:
             img = img.point(table, '1')
             #img = depoint(img)
             #img.show()
-          #  plt.imshow(img)
-          #  plt.show()
-          #  plt.close()
+            if platform.system() == 'Windows':
+                plt.imshow(img)
+                plt.show()
+                plt.close()
             validate_code = pytesseract.image_to_string(img, config='-psm 7')
             if (len(validate_code)!=4):
                 continue
@@ -135,7 +141,7 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
             return None 
         #print(time.time() - embark)
         vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-        if len(re.findall('请输入',vain)) != 0:
+        if len(re.findall('请输入',vain.read().decode())) != 0:
             logging.debug('登出了不知道为什么')
             client = client_login(username, password)
             #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
@@ -150,7 +156,7 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
 #get input
 #pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 username = '15123005'
-password = 'Ran0929'
+#password = 'Ran0929'
 class_ids = ['08306030',]
 teacher_ids = ['1002',]
 class_list = [(class_ids[i], teacher_ids[i]) for i in range(len(class_ids))]

@@ -155,7 +155,10 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
                 #embark = time.time()
             time.sleep(idle_time)
         except TimeoutError:
-            logging.debug('连接失败')
+            logging.debug('连接失败,TimeoutError')
+            fliper = True
+        except urllib.request.URLError:
+            logging.debug('连接失败,URLErroor')
             fliper = True
     print ('结束')
     return None

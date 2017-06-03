@@ -124,29 +124,39 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
     request = request_constructor(username, 'select_course', class_list)
     vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
     flag = True
-    embark = time.time()
+    fliper = True
     while flag:
-        reponse = client.opener.open(request).read().decode()
-        #logging.debug(reponse)
-        #if (len(re.findall('教学班人数已满', reponse)) != 0):
-            #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-        logging.debug('持续尝试中...')
-        if len(re.findall('已选此课程', reponse)) == len(class_list):
-            logging.debug ('check')
-            flag = False
-        elif len(re.findall('已选此课程', reponse)) != 0:
-            logging.debug('已选部分课程')
-        elif len(re.findall('限制', reponse)) != 0:
-            logging.debug('被限制登陆了')
-            return None 
-        #print(time.time() - embark)
-        vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-        if len(re.findall('请输入',vain.read().decode())) != 0:
-            logging.debug('登出了不知道为什么')
-            client = client_login(username, password)
-            #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-            #embark = time.time()
-        time.sleep(idle_time)
+        try:
+            reponse = client.opener.open(request).read().decode()
+            #logging.debug(reponse)
+            #if (len(re.findall('教学班人数已满', reponse)) != 0):
+                #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+            if fliper:
+                logging.debug('持续尝试中...')
+                fliper = False
+            if len(re.findall('已选此课程', reponse)) == len(class_list):
+                logging.debug ('check')
+                fliper = True
+                flag = False
+            elif len(re.findall('已选此课程', reponse)) != 0:
+                logging.debug('已选部分课程')
+                fliper = True
+            elif len(re.findall('限制', reponse)) != 0:
+                logging.debug('被限制登陆了')
+                fliper = True
+                return None 
+            #print(time.time() - embark)
+            vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+            if len(re.findall('请输入',vain.read().decode())) != 0:
+                logging.debug('登出了不知道为什么')
+                fliper = True
+                client = client_login(username, password)
+                #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+                #embark = time.time()
+            time.sleep(idle_time)
+        except TimeoutError:
+            logging.debug('连接失败')
+            fliper = True
     print ('结束')
     return None
 

@@ -63,14 +63,14 @@ class sim_client:
             temp_file.write(self.opener.open(self.CodeUrl).read())
             temp_file.close()
             img = Image.open('temp_code.jpg')
-            img = img.convert('L')
+          #  img = img.convert('L')
             #img = img.filter(ImageFilter.MedianFilter())
             #img = img.point(table, '1')
             #img = depoint(img)
             #img.show()
-            plt.imshow(img)
-            plt.show()
-            plt.close()
+          #  plt.imshow(img)
+          #  plt.show()
+          #  plt.close()
             validate_code = pytesseract.image_to_string(img, config='-psm 7')
             if (len(validate_code)!=4):
                 continue

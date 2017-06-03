@@ -134,12 +134,12 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
             logging.debug('被限制登陆了')
             return None 
         #print(time.time() - embark)
-        elif len(re.findall('请输入',reponse)) != 0:
+        vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+        if len(re.findall('请输入',vain)) != 0:
             logging.debug('登出了不知道为什么')
             client = client_login(username, password)
             #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
             #embark = time.time()
-        vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
         time.sleep(idle_time)
     print ('结束')
     return None

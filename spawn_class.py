@@ -7,13 +7,39 @@ import os.path
 import zlib
 import http.cookiejar
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import *
 import pytesseract
 import logging
 #from Auto_CHPTCHA import *
-#from pass_input import *
-
+threshold=110
+table = []
+for i in range(256):
+    if i < threshold:
+        table.append(0)
+    else:
+        table.append(1)
 model_dict = {}
+def depoint(img):   #input: gray image
+    pixdata = img.load()
+    w,h = img.size
+    tmpset = set()
+    for y in range(1,h-1):
+        for x in range(1,w-1):
+            count = 0
+            #print(pixdata[x, y - 1])
+            if pixdata[x,y-1] == 0:
+                count = count + 1
+            if pixdata[x,y+1] == 0:
+                count = count + 1
+            if pixdata[x-1,y] == 0:
+                count = count + 1
+            if pixdata[x+1,y] == 0:
+                count = count + 1
+            if count > 2:
+                tmpset.add((x,y))
+    for i in tmpset:
+        pixdata[i] = 0
+    return img
 logging.basicConfig(filename = 'xk.log', level = logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 base_url = 'http://xk.autoisp.shu.edu.cn:8080'
@@ -37,9 +63,15 @@ class sim_client:
             temp_file.write(self.opener.open(self.CodeUrl).read())
             temp_file.close()
             img = Image.open('temp_code.jpg')
-            #img = img.convert('1')
+            img = img.convert('L')
+            #img = img.filter(ImageFilter.MedianFilter())
+            #img = img.point(table, '1')
+            #img = depoint(img)
             #img.show()
-            validate_code = pytesseract.image_to_string(img)
+            plt.imshow(img)
+            plt.show()
+            plt.close()
+            validate_code = pytesseract.image_to_string(img, config='-psm 7')
             if (len(validate_code)!=4):
                 continue
             logging.debug(validate_code)
@@ -63,6 +95,7 @@ def client_login(username, password):
         if (content.find('限制') != -1):
             logging.debug('被限制登陆了')
         content = client.run()
+        logging.debug('登陆失败')
     logging.debug('login success')
     return client
 
@@ -116,7 +149,7 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
 #get input
 #pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 username = '15123005'
-password = 'Laizenan09'
+password = 'Ran0929'
 class_ids = ['08306030',]
 teacher_ids = ['1002',]
 class_list = [(class_ids[i], teacher_ids[i]) for i in range(len(class_ids))]

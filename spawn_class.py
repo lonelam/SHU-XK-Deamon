@@ -63,9 +63,9 @@ class sim_client:
             temp_file.write(self.opener.open(self.CodeUrl).read())
             temp_file.close()
             img = Image.open('temp_code.jpg')
-          #  img = img.convert('L')
+            img = img.convert('L')
             #img = img.filter(ImageFilter.MedianFilter())
-            #img = img.point(table, '1')
+            img = img.point(table, '1')
             #img = depoint(img)
             #img.show()
           #  plt.imshow(img)
@@ -122,23 +122,24 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
     while flag:
         reponse = client.opener.open(request).read().decode()
         #logging.debug(reponse)
-        if (len(re.findall('教学班人数已满', reponse)) != 0):
-            logging.debug('课满，继续尝试')
-        
+        #if (len(re.findall('教学班人数已满', reponse)) != 0):
+            #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+        logging.debug('持续尝试中...')
         if len(re.findall('已选此课程', reponse)) == len(class_list):
             logging.debug ('check')
             flag = False
         elif len(re.findall('已选此课程', reponse)) != 0:
-            vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
-        if len(re.findall('限制', reponse)) != 0:
+            logging.debug('已选部分课程')
+        elif len(re.findall('限制', reponse)) != 0:
             logging.debug('被限制登陆了')
             return None 
         #print(time.time() - embark)
         elif len(re.findall('请输入',reponse)) != 0:
             logging.debug('登出了不知道为什么')
             client = client_login(username, password)
-            vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
+            #vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
             #embark = time.time()
+        vain = client.opener.open(base_url + '/CourseSelectionStudent/FastInput')
         time.sleep(idle_time)
     print ('结束')
     return None

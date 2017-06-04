@@ -17,6 +17,9 @@ threshold=110
 cfg = configparser.ConfigParser()
 cfg.read('config.ini')
 password = str(cfg.get('user', 'password'))
+username = str(cfg.get('user', 'username'))
+class_ids = eval(cfg.get('courses', 'course_list'))#['08306030',]
+teacher_ids = eval(cfg.get('courses', 'teacher_ids'))#['1002',]
 table = []
 for i in range(256):
     if i < threshold:
@@ -168,10 +171,9 @@ def course_attack(username, password, class_list, idle_time = 7, reset_time = 10
 
 #get input
 #pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
-username = '15123005'
+#username = '15123005'
 #password = 'Ran0929'
-class_ids = ['08306030',]
-teacher_ids = ['1002',]
+
 class_list = [(class_ids[i], teacher_ids[i]) for i in range(len(class_ids))]
 
 course_attack(username, password, class_list)

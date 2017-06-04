@@ -12,11 +12,12 @@ usage
 
 -----
 config.ini
-[user]
-username:151234567
-password:12345678
-[courses]
-course_list:['08306030',]
-teacher_ids:['1002',]
+-----
+	[user]
+	username:151234567
+	password:12345678
+	[courses]
+	course_list:['08306030',]
+	teacher_ids:['1002',]
 
 bug反馈:diggerdu@hotmail.com<br />

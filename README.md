@@ -1,7 +1,21 @@
-# Shanghai-University-Course-Kit
+# SHU-XK-Deamon
 
-上海大学学生自动选课工具<br />
-...
+上海大学 选课系统 自动选课守护<br />
+
+Thanks to the inspiration from [Lodour's](https://github.com/Lodour/SHU-XK) and [Diggerdu's](https://github.com/diggerdu/Shanghai-University-Course-Kit) Repo
+
+Write this because of growing course proxy in xk.shu.edu.cn and more restricted system environment
+
+I'm not sure but indeed we need a tool that is strong enough grasping courses day and night.
+
+However to jump over the validate code is not a small case. 
+
+Diggerdu uses initially SVM and then RNN which finally reach 90%+ correctness.
+
+Unfortunately he uses bunches of dependencys that I can't resolve.
+
+and You can use this script with less dependencys to resolve.
+
 -----
 usage
 -----

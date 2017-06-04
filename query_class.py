@@ -7,12 +7,13 @@ import os.path
 import zlib
 import configparser
 import http.cookiejar
-import matplotlib.pyplot as plt
-from PIL import *
+from PIL import Image
 import pytesseract
 import logging
 import platform
 #from Auto_CHPTCHA import *
+if platform.system() == 'Windows':
+    import matplotlib.pyplot as plt
 threshold=110
 cfg = configparser.ConfigParser()
 cfg.read('config.ini')

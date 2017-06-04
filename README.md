@@ -21,8 +21,8 @@ usage
 -----
 1. $sudo pip3 install pillow pytesseract
 2. $sudo apt install tesseract-ocr
-3. $git clone https://github.com/lonelam/Shanghai-University-Course-Kit.git
-4. $cd Shanghai-University-Course-Kit
+3. $git clone https://github.com/lonelam/SHU-XK-Deamon.git
+4. $cd SHU-XK-Deamon
 5. Create and modify 'config.ini'.
 6. $nohup python3 query_class.py &
 

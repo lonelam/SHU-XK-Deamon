@@ -7,8 +7,10 @@ usage
 -----
 1. $sudo pip3 install pillow pytesseract
 2. $sudo apt install tesseract-ocr
-3. Create and modify 'config.ini'.
-4. $nohup python3 query_class.py &
+3. $git clone https://github.com/lonelam/Shanghai-University-Course-Kit.git
+4. $cd Shanghai-University-Course-Kit
+5. Create and modify 'config.ini'.
+6. $nohup python3 query_class.py &
 
 -----
 config.ini

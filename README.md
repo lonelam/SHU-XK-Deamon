@@ -1,6 +1,6 @@
 # SHU-XK-Deamon
 
-上海大学 选课系统 自动选课守护<br />
+However, because of the crash of xk-system recently, we decided to remove codes temperary.
 
 Thanks to the inspiration from [Lodour's](https://github.com/Lodour/SHU-XK) and [Diggerdu's](https://github.com/diggerdu/Shanghai-University-Course-Kit) Repo
 
